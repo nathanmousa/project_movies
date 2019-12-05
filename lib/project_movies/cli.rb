@@ -2,11 +2,12 @@ Class MovieDB::CLI
 
   def start
     puts "Welcome to the Movie Database App"
+    puts "---------------------------------"
     menu
   end
 
   def menu
-    puts "List Functionality Here"
+    puts "Press 1 to search."
     input = gets.strip
 
     search_movie if input == 1
