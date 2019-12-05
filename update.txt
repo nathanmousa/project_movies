@@ -1,0 +1,6 @@
+How to commit: (do this every 15 minutes)
+-----------------------------------------
+
+Type 'git add .' <--- (Get all of your altered files ready to commit.)
+Type 'git commit -m ‘commit message contents’' <--- (Commit them to git.)
+Type 'git push'  <--- (Push the files to your github.)
