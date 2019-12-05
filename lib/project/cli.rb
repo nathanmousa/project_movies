@@ -60,18 +60,31 @@ class MovieDB::CLI
       end
       spacer
       puts "Rating: %#{movie.vote_average.to_s.delete('.')}"
-      puts "Genre: #{movie.genre_ids}"
+      puts "Genre: #{movie.genre_list}"
       puts "Status: #{movie.status}"
       spacer
       puts "Runtime: #{movie.runtime}"
-      puts "Budget: $#{movie.budget}"
-      puts "Revenue: $#{movie.revenue}"
-      puts "Profit: $#{movie.revenue - movie.budget}"
+      puts "Budget: #{currency(movie.budget)}"
+      puts "Revenue: #{currency(movie.revenue)}"
+      puts "Profit: #{currency(movie.revenue - movie.budget)}"
       spacer
-      puts "Production Companies: #{movie.companies}"
+      puts "Production Companies: #{movie.production_list}"
       spacer
       puts "Description: #{movie.overview}"
-
+      spacer
+      spacer
+      puts "-----------------------------------------------------------------"
+      puts "Type 'exit' to close this app or 'return' to go back to the main menu."
+      input = gets.strip.downcase
+      
+      if input == 'exit'
+        close
+      elsif input == 'return'
+        clear
+        menu
+      else
+        puts "Invalid Response. Please try again or type 'exit' to close the program."
+      end
     end
   end
   
@@ -101,6 +114,10 @@ class MovieDB::CLI
     clear
     puts "Thanks for using The Movie Database App! Goodbye!"
     exit
+  end
+  
+  def currency(num)
+  "$#{num.to_s.gsub(/\d(?=(...)+$)/, '\0,')}"
   end
   
 end
