@@ -52,10 +52,26 @@ class MovieDB::CLI
       header
       
       title = Artii::Base.new
-      puts title.asciify("#{movie.title}") + "#{movie.release_date[0..3]}"
+      if movie.title.split.size <= 2
+        puts title.asciify("#{movie.title}") + "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
+      else
+        puts "#{movie.title}"
+        puts "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
+      end
       spacer
-      
-      
+      puts "Rating: %#{movie.vote_average.to_s.delete('.')}"
+      puts "Genre: #{movie.genre_ids}"
+      puts "Status: #{movie.status}"
+      spacer
+      puts "Runtime: #{movie.runtime}"
+      puts "Budget: $#{movie.budget}"
+      puts "Revenue: $#{movie.revenue}"
+      puts "Profit: $#{movie.revenue - movie.budget}"
+      spacer
+      puts "Production Companies: #{movie.companies}"
+      spacer
+      puts "Description: #{movie.overview}"
+
     end
   end
   
@@ -71,9 +87,9 @@ class MovieDB::CLI
   end
   
   def header
-    puts "---------------------------------------------"
-    puts "           The Movie Database App            "
-    puts "---------------------------------------------"
+    puts "-----------------------------------------------------------------"
+    puts "                     The Movie Database App                      "
+    puts "-----------------------------------------------------------------"
     spacer
   end
   
