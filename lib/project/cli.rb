@@ -46,10 +46,15 @@ class MovieDB::CLI
       spacer
       puts "What movie would you like to see more information on?"
       input = gets.strip.downcase
-      movie_selection = MovieDB::Movies.all[input.to_i - 1]
-      MovieDB::APIService.search_single_movie(movie_selection)
+      movie = MovieDB::Movies.all[input.to_i - 1]
+      MovieDB::APIService.search_single_movie(movie)
       clear
       header
+      
+      title = Artii::Base.new
+      puts title.asciify("#{movie.title}") + "#{movie.release_date[0..3]}"
+      spacer
+      
       
     end
   end
