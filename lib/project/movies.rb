@@ -1,5 +1,5 @@
 class MovieDB::Movies
-  attr_accessor :title, :id, :poster_path, :genre_ids, :vote_average, :overview, :release_date, :budget, :revenue, :status, :runtime, :production_companies
+  attr_accessor :title, :id, :poster_path, :genre_ids, :vote_average, :overview, :release_date, :budget, :revenue, :status, :runtime, :production_companies, :company
   @@all = []
   
   def initialize(args)
@@ -14,9 +14,16 @@ class MovieDB::Movies
   end
   
   def companies
-    x = @production_companies.each do |k, v|
+    companies = []
+    
+    @production_companies.each do |hash|
+      hash.each do |key, data|
+        if key == 'name' 
+          companies << data
+        end
+      end
     end
-    binding.pry
+    companies.join(', ')
   end
   
   def self.all
