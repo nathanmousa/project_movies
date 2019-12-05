@@ -12,9 +12,6 @@ class MovieDB::APIService
   
   def self.search_single_movie(search)
     results = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{search.id}?api_key=#{API_KEY}"))
-    binding.pry
-    results["results"].each do |movie|
-      MovieDB::Movies.new(movie)
-    end
+    search.update(results)
   end
 end

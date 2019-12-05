@@ -2,15 +2,15 @@ class MovieDB::CLI
 
   def start
     clear
-    header
     menu
   end
 
   def menu
     input = nil
     
-    spacer
+    header
     puts "What would you like to do today? Type 'exit' anytime to close the program."
+    spacer
     puts "1. Search Movie"
     input = gets.strip.downcase
     
@@ -39,14 +39,18 @@ class MovieDB::CLI
     else
       MovieDB::APIService.search_movie(input)
       clear
-      puts "What movie would you like to see more information on?"
+      header
       MovieDB::Movies.all.each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
-      
+      spacer
+      puts "What movie would you like to see more information on?"
       input = gets.strip.downcase
       movie_selection = MovieDB::Movies.all[input.to_i - 1]
       MovieDB::APIService.search_single_movie(movie_selection)
+      clear
+      header
+      
     end
   end
   
@@ -65,6 +69,7 @@ class MovieDB::CLI
     puts "---------------------------------------------"
     puts "           The Movie Database App            "
     puts "---------------------------------------------"
+    spacer
   end
   
   def spacer
