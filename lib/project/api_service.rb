@@ -4,6 +4,10 @@ class MovieDB::APIService
 
   def self.search_movie(input)
     results = JSON.parse(RestClient.get("#{BASE_URL}/search/movie?api_key=#{API_KEY}&query=#{input}"))
+    
+    results["results"].each do |movie|
+      MovieDB::Movies.new(movie)
+    end
     binding.pry
   end
 end
