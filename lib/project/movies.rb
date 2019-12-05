@@ -43,6 +43,10 @@ class MovieDB::Movies
     @@all
   end
   
+  def self.reset
+    @@all.clear
+  end
+  
   
   
   private
