@@ -1,7 +1,7 @@
 require 'pry'
-require 'json'
-require 'rest-client'
+require 'open-uri'
+require 'nokogiri'
 
-require_relative "./project_movies/version"
-require_relative "./project_movies/cli"
-require_relative "./project_movies/api_service"
+require_relative "./project/version"
+require_relative "./project/cli"
+require_relative "./project/api_service"
