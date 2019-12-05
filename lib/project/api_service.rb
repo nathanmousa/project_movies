@@ -8,6 +8,5 @@ class MovieDB::APIService
     results["results"].each do |movie|
       MovieDB::Movies.new(movie)
     end
-    binding.pry
   end
 end
