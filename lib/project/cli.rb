@@ -15,7 +15,7 @@ class MovieDB::CLI
     input = gets.strip.downcase
     
     if input == 'exit'
-      exit
+      close
     elsif input.to_i == 1 || input == "search movie"
       search_movie
     else
@@ -26,16 +26,27 @@ class MovieDB::CLI
   def search_movie
     input = nil
     
-    
     clear
     header
     puts "What movie would you like to search? Type 'return' to go back to the main menu."
     input = gets.strip.downcase
     
-    exit if input == 'exit'
-    MovieDB::APIService.search_movie(input)
-    MovieDB::Movies.all.each.with_index(1) do |movie, index|
-      puts "#{index}. #{movie.title}"
+    if input == 'exit'
+      close
+    elsif input == 'return'
+      clear
+      menu
+    else
+      MovieDB::APIService.search_movie(input)
+      clear
+      puts "What movie would you like to see more information on?"
+      MovieDB::Movies.all.each.with_index(1) do |movie, index|
+        puts "#{index}. #{movie.title}"
+      end
+      
+      input = gets.strip.downcase
+      movie_selection = MovieDB::Movies.all[input.to_i - 1]
+      MovieDB::APIService.search_single_movie(movie_selection)
     end
   end
   
@@ -51,13 +62,19 @@ class MovieDB::CLI
   end
   
   def header
-    puts "------------------------------------"
-    puts "      The Movie Database App        "
-    puts "------------------------------------"
+    puts "---------------------------------------------"
+    puts "           The Movie Database App            "
+    puts "---------------------------------------------"
   end
   
   def spacer
     puts ""
+  end
+  
+  def close
+    clear
+    puts "Thanks for using The Movie Database App! Goodbye!"
+    exit
   end
   
 end
