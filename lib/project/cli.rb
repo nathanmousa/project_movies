@@ -80,40 +80,6 @@ class MovieDB::CLI
     close
   end
 
-  def top_movies
-    input = nil
-
-    clear
-    header
-    puts "Here are the top 20 movies of all time:".colorize(:yellow)
-    spacer
-    MovieDB::APIService.pull_movies('top_rated')
-    range = MovieDB::Movies.all.count.clamp(1, 20)
-    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
-      puts "#{index}. #{movie.title}"
-    end
-    spacer
-    puts "What movie would you like to see more information on?".colorize(:yellow)
-    select_movie(range)
-  end
-
-  def popular_movies
-    input = nil
-
-    clear
-    header
-    puts "Here are the top 20 popular movies today:".colorize(:yellow)
-    spacer
-    MovieDB::APIService.pull_movies('popular')
-    range = MovieDB::Movies.all.count.clamp(1, 20)
-    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
-      puts "#{index}. #{movie.title}"
-    end
-    spacer
-    puts "What movie would you like to see more information on?".colorize(:yellow)
-    select_movie(range)
-  end
-
   def recommended_movies
     input = nil
 
@@ -148,42 +114,20 @@ class MovieDB::CLI
   end
 
   def now_playing
-    input = nil
-
-    clear
-    header
-    puts "Here are a few movies playing today at your local theater:".colorize(:yellow)
-    spacer
-    MovieDB::APIService.pull_movies('now_playing')
-    range = MovieDB::Movies.all.count.clamp(1, 10)
-    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
-      puts "#{index}. #{movie.title}"
-    end
-    spacer
-    puts "What movie would you like to see more information on?".colorize(:yellow)
-    select_movie(range)
+    fetch_data("Here are a few movies playing today at your local theater:", "now_playing", 10)
   end
 
   def upcoming_movies
-    input = nil
-
-    clear
-    header
-    puts "Here are a few upcoming movies:".colorize(:yellow)
-    spacer
-    MovieDB::APIService.pull_movies('upcoming')
-    range = MovieDB::Movies.all.count.clamp(1, 10)
-    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
-      puts "#{index}. #{movie.title}"
-    end
-    spacer
-    puts "What movie would you like to see more information on?".colorize(:yellow)
-    select_movie(range)
+    fetch_data("Here are a few upcoming movies:", "upcoming", 10)
+  end
+  
+  def top_movies
+    fetch_data("Here are the top 20 movies of all time:", "top_rated", 20)
   end
 
-
-
-
+  def popular_movies
+    fetch_data("Here are the top 20 popular movies today:", "popular", 20)
+  end
 
   def select_movie(array_range)
     spacer
@@ -300,5 +244,24 @@ class MovieDB::CLI
     spacer
     puts "Invalid Response! Please try again or type 'exit' to close the program.".colorize(:light_red)
     spacer
+  end
+  
+  def fetch_data(script, method, range)
+    input = nil
+
+    clear
+    header
+    puts "#{script}".colorize(:yellow)
+    spacer
+    MovieDB::APIService.pull_movies("#{method}")
+    array_range = MovieDB::Movies.all.count.clamp(1, range)
+    
+    MovieDB::Movies.all.take(array_range).each.with_index(1) do |movie, index|
+      puts "#{index}. #{movie.title}"
+    end
+    
+    spacer
+    puts "What movie would you like to see more information on?".colorize(:yellow)
+    select_movie(array_range)
   end
 end
