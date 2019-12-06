@@ -31,8 +31,8 @@ PLATFORMS
 
 DEPENDENCIES
   artii (~> 2.1, >= 2.1.2)
-  json (~> 2.2)
-  pry (~> 0.12.2)
+  json
+  pry
   rest-client (~> 2.1)
 
 BUNDLED WITH
