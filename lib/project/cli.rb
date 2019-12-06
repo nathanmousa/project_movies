@@ -54,13 +54,19 @@ class MovieDB::CLI
       clear
       header
       MovieDB::APIService.search_movie(input)
-      MovieDB::Movies.all.take(7).each.with_index(1) do |movie, index|
-        puts "#{index}. #{movie.title}"
-      end
 
-      spacer
-      puts "What movie would you like to see more information on?"
-      select_movie(7)
+      if MovieDB::Movies.all.count >= 1
+        MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
+          puts "#{index}. #{movie.title}"
+        end
+        range = MovieDB::Movies.all.count.clamp(1, 7)
+        spacer
+        puts "What movie would you like to see more information on?"
+        select_movie(range)
+      else
+        puts "Sorry, there were no movies by that name. Please try again."
+        input = gets.strip.downcase
+      end
     end
     close
   end
@@ -73,13 +79,13 @@ class MovieDB::CLI
     puts "Here are the top 20 movies of all time:"
     spacer
     MovieDB::APIService.top_movies
-    MovieDB::Movies.all.take(20).each.with_index(1) do |movie, index|
+    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
-
+    range = MovieDB::Movies.all.count.clamp(1, 20)
     spacer
     puts "What movie would you like to see more information on?"
-    select_movie(20)
+    select_movie(range)
   end
 
   def popular_movies
@@ -90,13 +96,13 @@ class MovieDB::CLI
     puts "Here are the top 20 popular movies today:"
     spacer
     MovieDB::APIService.popular_movies
-    MovieDB::Movies.all.take(20).each.with_index(1) do |movie, index|
+    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
-
+    range = MovieDB::Movies.all.count.clamp(1, 20)
     spacer
     puts "What movie would you like to see more information on?"
-    select_movie(20)
+    select_movie(range)
   end
 
   def recommended_movies
@@ -121,24 +127,25 @@ class MovieDB::CLI
       MovieDB::APIService.recommended(movie.id)
       puts "Here are some recommended movies based on #{movie.title}:"
       spacer
-      MovieDB::Movies.all.take(5).each.with_index(1) do |movie, index|
+      MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
+      range = MovieDB::Movies.all.count.clamp(1, 5)
       spacer
       puts "What movie would you like to see more information on?"
-      select_movie(5)
+      select_movie(range)
     end
     close
   end
 
-  def select_movie(array_range) #NEED TO FIX USER FROM SELECTING OUTSIDE ARRAY RANGE + STOP QUERY IF NO MOVIE IS AVAILABLE + IF ONLY ONE MOVIE, SKIP SELECTION AND GO STRAIGHT TO MOVIE
+  def select_movie(array_range) #STOP QUERY IF NO MOVIE IS AVAILABLE + IF ONLY ONE MOVIE, SKIP SELECTION AND GO STRAIGHT TO MOVIE
     input = gets.strip.downcase
 
     while input != 'exit'
       if input == 'return'
         clear
         menu
-      elsif numeric(input) && input.to_i.between?(1,array_range)
+      elsif numeric(input) && input.to_i.between?(1, array_range)
         clear
         header
         movie = MovieDB::Movies.all[input.to_i - 1]
