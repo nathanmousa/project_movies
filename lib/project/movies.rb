@@ -1,5 +1,5 @@
 class MovieDB::Movies
-  attr_accessor :title, :id, :poster_path, :genres, :vote_average, :overview, :release_date, :budget, :revenue, :status, :runtime, :production_companies
+  attr_accessor :title, :id, :poster_path, :genres, :vote_average, :overview, :release_date, :budget, :revenue, :status, :runtime, :production_companies, :name, :character
   @@all = []
   
   def initialize(args)
@@ -13,17 +13,18 @@ class MovieDB::Movies
     end
   end
   
-  def production_list
-    companies = []
+  def joined_list(var)
+    array = []
+    instance_variable = instance_variable_get("@#{var}")
     
-    @production_companies.each do |hash|
+    instance_variable.each do |hash|
       hash.each do |key, data|
         if key == 'name' 
-          companies << data
+          array << data
         end
       end
     end
-    companies.join(', ')
+    array.join(', ')
   end
   
   def genre_list
@@ -37,6 +38,32 @@ class MovieDB::Movies
       end
     end
     genres.join(', ')
+  end
+  
+  def actor_list
+    actor_name = []
+    
+    @name.each do |hash|
+      hash.each do |key, data|
+        if key == 'name' 
+          actor_name << data
+        end
+      end
+    end
+    actor_name
+  end
+  
+  def character_list
+    character = []
+    
+    @character.each do |hash|
+      hash.each do |key, data|
+        if key == 'character' 
+          character << data
+        end
+      end
+    end
+    character
   end
   
   def self.all

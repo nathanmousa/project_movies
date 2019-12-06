@@ -1,4 +1,4 @@
-class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
+class MovieDB::CLI
 
   def start
     clear
@@ -87,10 +87,10 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
     puts "Here are the top 20 movies of all time:"
     spacer
     MovieDB::APIService.pull_movies('top_rated')
+    range = MovieDB::Movies.all.count.clamp(1, 20)
     MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
-    range = MovieDB::Movies.all.count.clamp(1, 20)
     spacer
     puts "What movie would you like to see more information on?"
     select_movie(range)
@@ -215,7 +215,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
         puts "Revenue: #{currency(movie.revenue)}"
         puts "Profit: #{currency(movie.revenue - movie.budget)}"
         spacer
-        puts "Production Companies: #{movie.production_list}"
+        puts "Production Companies: #{movie.joined_list('production_companies')}"
         spacer
         spacer
         puts "Description:"

@@ -4,7 +4,9 @@ class MovieDB::APIService
 
   def self.search_single_movie(search) #Used to get 2nd level data not found in broad movie search such as genre, budget, runtime, etc.
     results = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{search.id}?api_key=#{API_KEY}"))
+    actors = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{search.id}/credits?api_key=#{API_KEY}"))
     search.update(results)
+    search.update(actors)
   end
 
   def self.pull_movies(method, search=nil, movie_id=nil)
