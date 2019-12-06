@@ -116,12 +116,12 @@ class MovieDB::CLI
       clear
       header
       MovieDB::APIService.search_movie(input)
-      movie = MovieDB::Movies.first
+      movie = MovieDB::Movies.all[0]
       MovieDB::Movies.reset
       MovieDB::APIService.recommended(movie.id)
       puts "Here are some recommended movies based on your most recently liked movie:"
       spacer
-      MovieDB::Movies.all.take(3).each.with_index(1) do |movie, index|
+      MovieDB::Movies.all.take(5).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
       spacer
@@ -234,5 +234,4 @@ class MovieDB::CLI
   def invalid
     puts "Invalid Response. Please try again or type 'exit' to close the program."
   end
-
 end

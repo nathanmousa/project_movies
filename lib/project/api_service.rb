@@ -28,8 +28,8 @@ class MovieDB::APIService
     end
   end
 
-  def self.recommended(movie)
-    results = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{movie.id}/recommendations?api_key=#{API_KEY}&page=1"))
+  def self.recommended(movie_id)
+    results = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{movie_id}/recommendations?api_key=#{API_KEY}&page=1"))
     results["results"].each do |movie|
       MovieDB::Movies.new(movie)
     end
