@@ -1,4 +1,4 @@
-class MovieDB::CLI
+class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page ++ Want to add Get Upcoming + Get Now Playing features into main menu
 
   def start
     clear
