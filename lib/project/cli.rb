@@ -69,7 +69,7 @@ class MovieDB::CLI
           puts "#{index}. #{movie.title}"
         end
         spacer
-        puts "What movie would you like to see more information on?".colorize(:yellow)
+        puts "What movie would you like to see more information on? Type the number referencing the movie.".colorize(:yellow)
         select_movie(range)
       else
         puts "Sorry, there were no movies by that name. Please try again.".colorize(:yellow)
@@ -107,7 +107,7 @@ class MovieDB::CLI
         puts "#{index}. #{movie.title}"
       end
       spacer
-      puts "What movie would you like to see more information on?".colorize(:yellow)
+      puts "What movie would you like to see more information on? Type the number referencing the movie.".colorize(:yellow)
       select_movie(range)
     end
     close
@@ -301,7 +301,7 @@ class MovieDB::CLI
     end
     
     spacer
-    puts "What movie would you like to see more information on?".colorize(:yellow)
+    puts "What movie would you like to see more information on? Type the number referencing the movie.".colorize(:yellow)
     select_movie(array_range)
   end
 end
