@@ -8,19 +8,22 @@ class MovieDB::CLI
   def menu
     input = nil
     MovieDB::Movies.reset
-    
+
     header
     puts "What would you like to do today?"
     spacer
     puts "1. Search Movie"
     puts "2. Top Movies"
+    puts "3. Popular Movies"
     input = gets.strip.downcase
-    
+
     while input != 'exit'
       if input.to_i == 1 || input == "search movie"
         search_movie
       elsif input.to_i == 2 || input == "top movies"
         top_movies
+      elsif input.to_i == 3 || input == "popular movies"
+        popular_movies
       elsif input == 'return'
         menu
       else
@@ -33,52 +36,69 @@ class MovieDB::CLI
 
   def search_movie
     input = nil
-    
+
     clear
     header
     puts "What movie would you like to search?"
     input = gets.strip.downcase
-    
+
     while input != 'exit'
       if input == 'return'
         clear
         menu
       end
-      
+
       clear
       header
       MovieDB::APIService.search_movie(input)
       MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
-      
+
       spacer
       puts "What movie would you like to see more information on?"
       select_movie
     end
     close
   end
-  
+
   def top_movies
     input = nil
-    
+
     clear
     header
-    puts "Here are the top 20 movies today!"
+    puts "Here are the top 20 movies of all time:"
     spacer
     MovieDB::APIService.top_movies
     MovieDB::Movies.all.take(20).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
-    
+
     spacer
     puts "What movie would you like to see more information on?"
     select_movie
   end
-  
-  def select_movie
+
+  def popular_movies
+    input = nil
+
+    clear
+    header
+    puts "Here are the top 20 popular movies today:"
+    spacer
+    MovieDB::APIService.popular_movies
+    MovieDB::Movies.all.take(20).each.with_index(1) do |movie, index|
+      puts "#{index}. #{movie.title}"
+    end
+
+    spacer
+    puts "What movie would you like to see more information on?"
+    select_movie
+  end
+
+  def select_movie #NEED TO FIX USER FROM SELECTING OUTSIDE ARRAY RANGE + STOP QUERY IF NO MOVIE IS AVAILABLE + IF ONLY ONE MOVIE, SKIP SELECTION AND GO STRAIGHT TO MOVIE
     input = gets.strip.downcase
-    
+
     while input != 'exit'
       if input == 'return'
         clear
@@ -89,20 +109,20 @@ class MovieDB::CLI
         movie = MovieDB::Movies.all[input.to_i - 1]
         MovieDB::APIService.search_single_movie(movie)
         title = Artii::Base.new
-        
+
         if movie.title.split.size <= 2
           puts title.asciify("#{movie.title}") + "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
         else
           puts "#{movie.title}"
           puts "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
         end
-        
+
         spacer
         puts "Rating: %#{movie.vote_average.to_s.delete('.')}"
         puts "Genre: #{movie.genre_list}"
         puts "Status: #{movie.status}"
         spacer
-        puts "Runtime: #{movie.runtime}"
+        puts "Runtime: #{movie.runtime} Minutes"
         puts "Budget: #{currency(movie.budget)}"
         puts "Revenue: #{currency(movie.revenue)}"
         puts "Profit: #{currency(movie.revenue - movie.budget)}"
@@ -116,7 +136,7 @@ class MovieDB::CLI
         puts "-----------------------------------------------------------------"
         spacer
         input = gets.strip.downcase
-        
+
         while input != 'exit'
           if input == 'return'
             clear
@@ -126,7 +146,7 @@ class MovieDB::CLI
             input = gets.strip.downcase
           end
         end
-        
+
       else
         invalid
         input = gets.strip.downcase
@@ -134,12 +154,12 @@ class MovieDB::CLI
     end
     close
   end
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   private
   def clear
     if Gem.win_platform?
@@ -148,7 +168,7 @@ class MovieDB::CLI
       system 'clear'
     end
   end
-  
+
   def header
     puts "----------------------------------------------------------------------"
     puts "                       The Movie Database App                         "
@@ -157,27 +177,27 @@ class MovieDB::CLI
     spacer
     spacer
   end
-  
+
   def spacer
     puts ""
   end
-  
+
   def close
     clear
     puts "Thanks for using The Movie Database App! Goodbye!"
     exit
   end
-  
+
   def currency(num)
   "$#{num.to_s.gsub(/\d(?=(...)+$)/, '\0,')}"
   end
-  
+
   def numeric(string)
     string.scan(/\D/).empty?
   end
-  
+
   def invalid
     puts "Invalid Response. Please try again or type 'exit' to close the program."
   end
-  
+
 end
