@@ -10,18 +10,21 @@ class MovieDB::CLI
     MovieDB::Movies.reset
     
     header
-    puts "What would you like to do today? Type 'exit' anytime to close the program."
+    puts "What would you like to do today?"
+    puts "Type 'exit' anytime to close the program."
     spacer
     puts "1. Search Movie"
     input = gets.strip.downcase
     
-    if input == 'exit'
-      close
-    elsif input.to_i == 1 || input == "search movie"
-      search_movie
-    else
-      puts "Invalid Response. Please try again or type 'exit' to close the program."
+    while input != 'exit'
+      if input.to_i == 1 || input == "search movie"
+        search_movie
+      else
+      invalid
+      input = gets.strip.downcase
+      end
     end
+    close
   end
 
   def search_movie
@@ -29,7 +32,8 @@ class MovieDB::CLI
     
     clear
     header
-    puts "What movie would you like to search? Type 'return' to go back to the main menu."
+    puts "What movie would you like to search?"
+    puts "Type 'exit' to close this app or 'return' to go back to the main menu."
     input = gets.strip.downcase
     
     while input != 'exit'
@@ -48,7 +52,7 @@ class MovieDB::CLI
       
       spacer
       puts "What movie would you like to see more information on?"
-      puts "Type 'return' to go back to the main menu."
+      puts "Type 'exit' to close this app or 'return' to go back to the main menu."
       select_search
     end
     close
@@ -98,13 +102,13 @@ class MovieDB::CLI
             clear
             menu
           else
-            puts "Invalid Response. Please try again or type 'exit' to close the program."
+            invalid
             input = gets.strip.downcase
           end
         end
         
       else
-        puts "Invalid Response. Please try again or type 'exit' to close the program."
+        invalid
         input = gets.strip.downcase
       end
     end
@@ -126,9 +130,9 @@ class MovieDB::CLI
   end
   
   def header
-    puts "-----------------------------------------------------------------"
-    puts "                     The Movie Database App                      "
-    puts "-----------------------------------------------------------------"
+    puts "---------------------------------------------------------------------------"
+    puts "                          The Movie Database App                           "
+    puts "---------------------------------------------------------------------------"
     spacer
   end
   
@@ -148,6 +152,10 @@ class MovieDB::CLI
   
   def numeric(string)
     string.scan(/\D/).empty?
+  end
+  
+  def invalid
+    puts "Invalid Response. Please try again or type 'exit' to close the program."
   end
   
 end
