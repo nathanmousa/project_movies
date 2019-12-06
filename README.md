@@ -1,8 +1,6 @@
-# ProjectMovies
+# The Movie Database App
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/project_movies`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The Movie Database App is a ruby based program that compiles data of movies released and/or in production. You can search any movie to find more information regarding it. You can also look at upcoming, popular, recommended and top movies!
 
 ## Installation
 
@@ -22,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The application itself has a built in user friendly GUI system that listens for user commands. Type 'exit' at anytime to exit the program and 'return' at anytime to return back to the main menu.
 
 ## Development
 
@@ -36,7 +34,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/'natha
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The Movie Database App is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
 
