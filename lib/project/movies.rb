@@ -27,43 +27,20 @@ class MovieDB::Movies
     array.join(', ')
   end
   
-  def genre_list
-    genres = []
+  def print_list(var)
+    array = []
+    instance_variable = instance_variable_get("@#{var}")
     
-    @genres.each do |hash|
+    instance_variable.each do |hash|
       hash.each do |key, data|
         if key == 'name' 
-          genres << data
+          array << data
         end
       end
     end
-    genres.join(', ')
-  end
-  
-  def actor_list
-    actor_name = []
-    
-    @name.each do |hash|
-      hash.each do |key, data|
-        if key == 'name' 
-          actor_name << data
-        end
-      end
+    array.each do |data|
+      data
     end
-    actor_name
-  end
-  
-  def character_list
-    character = []
-    
-    @character.each do |hash|
-      hash.each do |key, data|
-        if key == 'character' 
-          character << data
-        end
-      end
-    end
-    character
   end
   
   def self.all

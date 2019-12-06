@@ -207,7 +207,7 @@ class MovieDB::CLI
 
         spacer
         puts "Rating: %#{movie.vote_average.to_s.delete('.')}"
-        puts "Genre: #{movie.genre_list}"
+        puts "Genre: #{movie.joined_list('genres')}"
         puts "Status: #{movie.status}"
         spacer
         puts "Runtime: #{movie.runtime} Minutes"
@@ -220,6 +220,9 @@ class MovieDB::CLI
         spacer
         puts "Description:"
         puts "#{movie.overview}"
+        spacer
+        spacer
+        movie.print_list('character')
         spacer
         puts "-----------------------------------------------------------------"
         spacer
