@@ -129,7 +129,7 @@ class MovieDB::CLI
     fetch_data("Here are the top 20 popular movies today:", "popular", 20)
   end
 
-  def select_movie(array_range)
+  def select_movie(array_range) #Search down Hippo for no data movies
     spacer
     input = gets.strip.downcase
 
@@ -151,48 +151,67 @@ class MovieDB::CLI
           puts "#{movie.title}"
           puts "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}".colorize(:yellow)
         end
-
         spacer
+        
         if movie.vote_average.to_s.delete('.') != "00"
           puts "Rating: ".colorize(:yellow) + "%#{movie.vote_average.to_s.delete('.')}"
         else
           puts "Rating: ".colorize(:yellow) + "Not enough votes to provide a fair rating"
         end
+        
         puts "Genre: ".colorize(:yellow) + "#{movie.joined_list('genres')}"
         puts "Status: ".colorize(:yellow) + "#{movie.status}"
         spacer
-        puts "Runtime: ".colorize(:yellow) + "#{movie.runtime} Minutes"
-        if movie.budget.to_i != 0
-          puts "Budget: ".colorize(:yellow) + "#{currency(movie.budget)}"
+        
+        if movie.runtime.to_i != 0
+          puts "Runtime: ".colorize(:yellow) + "#{movie.runtime} Minutes"
         else
-          puts "Budget: ".colorize(:yellow) + "No Data"
+          puts "Runtime: ".colorize(:yellow) + "No Data"
         end
+        
         if movie.revenue.to_i != 0
           puts "Revenue: ".colorize(:yellow) + "#{currency(movie.revenue)}"
         else
           puts "Revenue: ".colorize(:yellow) + "No Data"
         end
+        
+        if movie.budget.to_i != 0
+          puts "Budget: ".colorize(:yellow) + "#{currency(movie.budget)}"
+        else
+          puts "Budget: ".colorize(:yellow) + "No Data"
+        end
+        
         if movie.revenue.to_i - movie.budget.to_i != 0
           puts "Profit: ".colorize(:yellow) + "#{currency(movie.revenue - movie.budget)}"
         else
           puts "Profit: ".colorize(:yellow) + "No Data"
         end
         spacer
-        puts "Production Companies: ".colorize(:yellow) + "#{movie.joined_list('production_companies')}"
-        spacer
-        puts "-----------------------------------------------------------------".colorize(:green)
-        spacer
-        puts "Description:".colorize(:yellow)
-        puts "#{movie.overview}"
-        spacer
-        puts "-----------------------------------------------------------------".colorize(:green)
-        spacer
-        puts "Starring:".colorize(:yellow)
-        actor_hash.take(10).each do |name, character|
-          puts "#{name} as #{character}"
+        
+        if !movie.joined_list('production_companies').empty?
+          puts "Production Companies: ".colorize(:yellow) + "#{movie.joined_list('production_companies')}"
+          spacer
         end
-        spacer
+        
         puts "-----------------------------------------------------------------".colorize(:green)
+        
+        if !movie.overview.empty?
+          spacer
+          puts "Description:".colorize(:yellow)
+          puts "#{movie.overview}"
+          spacer
+          puts "-----------------------------------------------------------------".colorize(:green)
+        end
+        
+        if !actor_hash.empty?
+          spacer
+          puts "Starring:".colorize(:yellow)
+          actor_hash.take(10).each do |name, character|
+            puts "#{name} as #{character}"
+          end
+          spacer
+          puts "-----------------------------------------------------------------".colorize(:green)
+        end
         puts "Type 'exit' to close this app or 'return' to go back to the main menu.".colorize(:yellow)
         spacer
         input = gets.strip.downcase
