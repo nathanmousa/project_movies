@@ -34,4 +34,18 @@ class MovieDB::APIService
       MovieDB::Movies.new(movie)
     end
   end
+
+  def self.now_playing
+    results = JSON.parse(RestClient.get("#{BASE_URL}/movie/now_playing?api_key=#{API_KEY}&page=1"))
+    results["results"].each do |movie|
+      MovieDB::Movies.new(movie)
+    end
+  end
+
+  def self.upcoming_movies
+    results = JSON.parse(RestClient.get("#{BASE_URL}/movie/upcoming?api_key=#{API_KEY}&page=1"))
+    results["results"].each do |movie|
+      MovieDB::Movies.new(movie)
+    end
+  end
 end

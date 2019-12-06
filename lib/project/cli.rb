@@ -16,6 +16,8 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page ++ Wa
     puts "2. Top Movies"
     puts "3. Popular Movies"
     puts "4. Recommended Movies"
+    puts "5. Now Playing"
+    puts "6. Upcoming Movies"
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -27,6 +29,10 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page ++ Wa
         popular_movies
       elsif input.to_i == 4 || input == "recommended movies"
         recommended_movies
+      elsif input.to_i == 5 || input == "now playing"
+        now_playing
+      elsif input.to_i == 6 || input == "upcoming movies"
+        upcoming_movies
       elsif input == 'return'
         menu
       else
@@ -138,6 +144,44 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page ++ Wa
     end
     close
   end
+
+  def now_playing
+    input = nil
+
+    clear
+    header
+    puts "Here are a few movies playing today at your local theater:"
+    spacer
+    MovieDB::APIService.now_playing
+    range = MovieDB::Movies.all.count.clamp(1, 10)
+    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
+      puts "#{index}. #{movie.title}"
+    end
+    spacer
+    puts "What movie would you like to see more information on?"
+    select_movie(range)
+  end
+
+  def upcoming_movies
+    input = nil
+
+    clear
+    header
+    puts "Here are a few upcoming movies:"
+    spacer
+    MovieDB::APIService.upcoming_movies
+    range = MovieDB::Movies.all.count.clamp(1, 10)
+    MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
+      puts "#{index}. #{movie.title}"
+    end
+    spacer
+    puts "What movie would you like to see more information on?"
+    select_movie(range)
+  end
+
+
+
+
 
   def select_movie(array_range)
     input = gets.strip.downcase
