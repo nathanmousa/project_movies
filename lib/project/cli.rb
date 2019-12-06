@@ -54,13 +54,13 @@ class MovieDB::CLI
       clear
       header
       MovieDB::APIService.search_movie(input)
-      MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
+      MovieDB::Movies.all.take(7).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
 
       spacer
       puts "What movie would you like to see more information on?"
-      select_movie
+      select_movie(7)
     end
     close
   end
@@ -79,7 +79,7 @@ class MovieDB::CLI
 
     spacer
     puts "What movie would you like to see more information on?"
-    select_movie
+    select_movie(20)
   end
 
   def popular_movies
@@ -96,7 +96,7 @@ class MovieDB::CLI
 
     spacer
     puts "What movie would you like to see more information on?"
-    select_movie
+    select_movie(20)
   end
 
   def recommended_movies
@@ -119,26 +119,26 @@ class MovieDB::CLI
       movie = MovieDB::Movies.all[0]
       MovieDB::Movies.reset
       MovieDB::APIService.recommended(movie.id)
-      puts "Here are some recommended movies based on your most recently liked movie:"
+      puts "Here are some recommended movies based on #{movie.title}:"
       spacer
       MovieDB::Movies.all.take(5).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
       spacer
       puts "What movie would you like to see more information on?"
-      select_movie
+      select_movie(5)
     end
     close
   end
 
-  def select_movie #NEED TO FIX USER FROM SELECTING OUTSIDE ARRAY RANGE + STOP QUERY IF NO MOVIE IS AVAILABLE + IF ONLY ONE MOVIE, SKIP SELECTION AND GO STRAIGHT TO MOVIE
+  def select_movie(array_range) #NEED TO FIX USER FROM SELECTING OUTSIDE ARRAY RANGE + STOP QUERY IF NO MOVIE IS AVAILABLE + IF ONLY ONE MOVIE, SKIP SELECTION AND GO STRAIGHT TO MOVIE
     input = gets.strip.downcase
 
     while input != 'exit'
       if input == 'return'
         clear
         menu
-      elsif numeric(input)
+      elsif numeric(input) && input.to_i.between?(1,array_range)
         clear
         header
         movie = MovieDB::Movies.all[input.to_i - 1]
@@ -232,6 +232,7 @@ class MovieDB::CLI
   end
 
   def invalid
+    spacer
     puts "Invalid Response. Please try again or type 'exit' to close the program."
   end
 end
