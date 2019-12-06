@@ -116,32 +116,17 @@ class MovieDB::CLI
       clear
       header
       MovieDB::APIService.search_movie(input)
-      MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
+      movie = MovieDB::Movies.first
+      MovieDB::Movies.reset
+      MovieDB::APIService.recommended(movie.id)
+      puts "Here are some recommended movies based on your most recently liked movie:"
+      spacer
+      MovieDB::Movies.all.take(3).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
-
       spacer
-      puts "Select which movie you want to base your recommendations on."
-      input = gets.strip.downcase
-
-      while input != 'exit'
-        if input == 'return'
-          clear
-          menu
-        elsif numeric(input)
-          clear
-          header
-          movie = MovieDB::Movies.all[input.to_i - 1]
-          MovieDB::APIService.recommended(movie)
-          MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
-            puts "#{index}. #{movie.title}"
-          end
-        else
-          invalid
-          input = gets.strip.downcase
-        end
-      end
-      close
+      puts "What movie would you like to see more information on?"
+      select_movie
     end
     close
   end
@@ -157,10 +142,10 @@ class MovieDB::CLI
         clear
         header
         movie = MovieDB::Movies.all[input.to_i - 1]
-        MovieDB::APIService.search_single_movie(movie)
+        MovieDB::APIService.search_single_movie(movie) #Update database with 2nd level data
         title = Artii::Base.new
 
-        if movie.title.split.size <= 2
+        if movie.title.length <= 10
           puts title.asciify("#{movie.title}") + "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
         else
           puts "#{movie.title}"
