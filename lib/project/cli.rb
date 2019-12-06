@@ -50,6 +50,7 @@ class MovieDB::CLI
     clear
     header
     puts "What movie would you like to search?"
+    spacer
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -185,6 +186,7 @@ class MovieDB::CLI
 
 
   def select_movie(array_range)
+    spacer
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -296,5 +298,6 @@ class MovieDB::CLI
   def invalid
     spacer
     puts "Invalid Response. Please try again or type 'exit' to close the program."
+    spacer
   end
 end
