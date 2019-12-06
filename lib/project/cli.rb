@@ -46,7 +46,7 @@ class MovieDB::CLI
       header
       MovieDB::APIService.search_movie(input)
       
-      MovieDB::Movies.all.take(5).each.with_index(1) do |movie, index|
+      MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
       
