@@ -159,7 +159,12 @@ class MovieDB::CLI
           puts "Rating: ".colorize(:yellow) + "Not enough votes to provide a fair rating"
         end
         
-        puts "Genre: ".colorize(:yellow) + "#{movie.joined_list('genres')}"
+        if !movie.joined_list('genres').empty?
+          puts "Genre: ".colorize(:yellow) + "#{movie.joined_list('genres')}"
+        else
+          puts "Genre: ".colorize(:yellow) + "No Data"
+        end
+        
         puts "Status: ".colorize(:yellow) + "#{movie.status}"
         spacer
         
