@@ -153,14 +153,30 @@ class MovieDB::CLI
         end
 
         spacer
-        puts "Rating: ".colorize(:yellow) + "%#{movie.vote_average.to_s.delete('.')}"
+        if movie.vote_average.to_s.delete('.') != "00"
+          puts "Rating: ".colorize(:yellow) + "%#{movie.vote_average.to_s.delete('.')}"
+        else
+          puts "Rating: ".colorize(:yellow) + "Not enough votes to provide a fair rating"
+        end
         puts "Genre: ".colorize(:yellow) + "#{movie.joined_list('genres')}"
         puts "Status: ".colorize(:yellow) + "#{movie.status}"
         spacer
         puts "Runtime: ".colorize(:yellow) + "#{movie.runtime} Minutes"
-        puts "Budget: ".colorize(:yellow) + "#{currency(movie.budget)}"
-        puts "Revenue: ".colorize(:yellow) + "#{currency(movie.revenue)}"
-        puts "Profit: ".colorize(:yellow) + "#{currency(movie.revenue - movie.budget)}"
+        if movie.budget.to_i != 0
+          puts "Budget: ".colorize(:yellow) + "#{currency(movie.budget)}"
+        else
+          puts "Budget: ".colorize(:yellow) + "No Data"
+        end
+        if movie.revenue.to_i != 0
+          puts "Revenue: ".colorize(:yellow) + "#{currency(movie.revenue)}"
+        else
+          puts "Revenue: ".colorize(:yellow) + "No Data"
+        end
+        if movie.revenue.to_i - movie.budget.to_i != 0
+          puts "Profit: ".colorize(:yellow) + "#{currency(movie.revenue - movie.budget)}"
+        else
+          puts "Profit: ".colorize(:yellow) + "No Data"
+        end
         spacer
         puts "Production Companies: ".colorize(:yellow) + "#{movie.joined_list('production_companies')}"
         spacer
