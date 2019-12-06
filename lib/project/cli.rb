@@ -132,7 +132,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
       MovieDB::APIService.pull_movies('search', input)
       movie = MovieDB::Movies.all[0]
       MovieDB::Movies.reset
-      MovieDB::APIService.pull_movies('recommendations', nil, movie.id)
+      MovieDB::APIService.pull_movies('similar', nil, movie.id)
       puts "Here are some recommended movies based on #{movie.title}:"
       spacer
       range = MovieDB::Movies.all.count.clamp(1, 5)
