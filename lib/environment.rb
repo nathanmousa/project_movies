@@ -2,6 +2,7 @@ require 'pry'
 require 'json'
 require 'rest-client'
 require 'artii'
+require 'colorize'
 
 require_relative "./project/version"
 require_relative "./project/cli"

@@ -10,7 +10,7 @@ class MovieDB::CLI
     MovieDB::Movies.reset
 
     header
-    puts "What would you like to do today?"
+    puts "What would you like to do today?".colorize(:yellow)
     spacer
     puts "1. Search Movie"
     puts "2. Top Movies"
@@ -49,7 +49,7 @@ class MovieDB::CLI
 
     clear
     header
-    puts "What movie would you like to search?"
+    puts "What movie would you like to search?".colorize(:yellow)
     spacer
     input = gets.strip.downcase
 
@@ -69,10 +69,10 @@ class MovieDB::CLI
           puts "#{index}. #{movie.title}"
         end
         spacer
-        puts "What movie would you like to see more information on?"
+        puts "What movie would you like to see more information on?".colorize(:yellow)
         select_movie(range)
       else
-        puts "Sorry, there were no movies by that name. Please try again."
+        puts "Sorry, there were no movies by that name. Please try again.".colorize(:yellow)
         spacer
         input = gets.strip.downcase
       end
@@ -85,7 +85,7 @@ class MovieDB::CLI
 
     clear
     header
-    puts "Here are the top 20 movies of all time:"
+    puts "Here are the top 20 movies of all time:".colorize(:yellow)
     spacer
     MovieDB::APIService.pull_movies('top_rated')
     range = MovieDB::Movies.all.count.clamp(1, 20)
@@ -93,7 +93,7 @@ class MovieDB::CLI
       puts "#{index}. #{movie.title}"
     end
     spacer
-    puts "What movie would you like to see more information on?"
+    puts "What movie would you like to see more information on?".colorize(:yellow)
     select_movie(range)
   end
 
@@ -102,7 +102,7 @@ class MovieDB::CLI
 
     clear
     header
-    puts "Here are the top 20 popular movies today:"
+    puts "Here are the top 20 popular movies today:".colorize(:yellow)
     spacer
     MovieDB::APIService.pull_movies('popular')
     range = MovieDB::Movies.all.count.clamp(1, 20)
@@ -110,7 +110,7 @@ class MovieDB::CLI
       puts "#{index}. #{movie.title}"
     end
     spacer
-    puts "What movie would you like to see more information on?"
+    puts "What movie would you like to see more information on?".colorize(:yellow)
     select_movie(range)
   end
 
@@ -119,7 +119,7 @@ class MovieDB::CLI
 
     clear
     header
-    puts "What movie did you recently like?"
+    puts "What movie did you recently like?".colorize(:yellow)
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -134,14 +134,14 @@ class MovieDB::CLI
       movie = MovieDB::Movies.all[0]
       MovieDB::Movies.reset
       MovieDB::APIService.pull_movies('similar', nil, movie.id)
-      puts "Here are some recommended movies based on #{movie.title}:"
+      puts "Here are some recommended movies based on #{movie.title}:".colorize(:yellow)
       spacer
       range = MovieDB::Movies.all.count.clamp(1, 5)
       MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
       spacer
-      puts "What movie would you like to see more information on?"
+      puts "What movie would you like to see more information on?".colorize(:yellow)
       select_movie(range)
     end
     close
@@ -152,7 +152,7 @@ class MovieDB::CLI
 
     clear
     header
-    puts "Here are a few movies playing today at your local theater:"
+    puts "Here are a few movies playing today at your local theater:".colorize(:yellow)
     spacer
     MovieDB::APIService.pull_movies('now_playing')
     range = MovieDB::Movies.all.count.clamp(1, 10)
@@ -160,7 +160,7 @@ class MovieDB::CLI
       puts "#{index}. #{movie.title}"
     end
     spacer
-    puts "What movie would you like to see more information on?"
+    puts "What movie would you like to see more information on?".colorize(:yellow)
     select_movie(range)
   end
 
@@ -169,7 +169,7 @@ class MovieDB::CLI
 
     clear
     header
-    puts "Here are a few upcoming movies:"
+    puts "Here are a few upcoming movies:".colorize(:yellow)
     spacer
     MovieDB::APIService.pull_movies('upcoming')
     range = MovieDB::Movies.all.count.clamp(1, 10)
@@ -177,7 +177,7 @@ class MovieDB::CLI
       puts "#{index}. #{movie.title}"
     end
     spacer
-    puts "What movie would you like to see more information on?"
+    puts "What movie would you like to see more information on?".colorize(:yellow)
     select_movie(range)
   end
 
@@ -202,38 +202,38 @@ class MovieDB::CLI
         title = Artii::Base.new
 
         if movie.title.length <= 13
-          puts title.asciify("#{movie.title}") + "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
+          puts title.asciify("#{movie.title}") + "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}".colorize(:yellow)
         else
           puts "#{movie.title}"
-          puts "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
+          puts "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}".colorize(:yellow)
         end
 
         spacer
-        puts "Rating: %#{movie.vote_average.to_s.delete('.')}"
-        puts "Genre: #{movie.joined_list('genres')}"
-        puts "Status: #{movie.status}"
+        puts "Rating: ".colorize(:yellow) + "%#{movie.vote_average.to_s.delete('.')}"
+        puts "Genre: ".colorize(:yellow) + "#{movie.joined_list('genres')}"
+        puts "Status: ".colorize(:yellow) + "#{movie.status}"
         spacer
-        puts "Runtime: #{movie.runtime} Minutes"
-        puts "Budget: #{currency(movie.budget)}"
-        puts "Revenue: #{currency(movie.revenue)}"
-        puts "Profit: #{currency(movie.revenue - movie.budget)}"
+        puts "Runtime: ".colorize(:yellow) + "#{movie.runtime} Minutes"
+        puts "Budget: ".colorize(:yellow) + "#{currency(movie.budget)}"
+        puts "Revenue: ".colorize(:yellow) + "#{currency(movie.revenue)}"
+        puts "Profit: ".colorize(:yellow) + "#{currency(movie.revenue - movie.budget)}"
         spacer
-        puts "Production Companies: #{movie.joined_list('production_companies')}"
+        puts "Production Companies: ".colorize(:yellow) + "#{movie.joined_list('production_companies')}"
         spacer
-        puts "-----------------------------------------------------------------"
+        puts "-----------------------------------------------------------------".colorize(:green)
         spacer
-        puts "Description:"
+        puts "Description:".colorize(:yellow)
         puts "#{movie.overview}"
         spacer
-        puts "-----------------------------------------------------------------"
+        puts "-----------------------------------------------------------------".colorize(:green)
         spacer
-        puts "Starring:"
+        puts "Starring:".colorize(:yellow)
         actor_hash.take(10).each do |name, character|
           puts "#{name} as #{character}"
         end
         spacer
-        puts "-----------------------------------------------------------------"
-        puts "Type 'exit' to close this app or 'return' to go back to the main menu."
+        puts "-----------------------------------------------------------------".colorize(:green)
+        puts "Type 'exit' to close this app or 'return' to go back to the main menu.".colorize(:yellow)
         spacer
         input = gets.strip.downcase
 
@@ -270,10 +270,10 @@ class MovieDB::CLI
   end
 
   def header
-    puts "----------------------------------------------------------------------"
-    puts "                       The Movie Database App                         "
-    puts "----------------------------------------------------------------------"
-    puts "Type 'exit' to close this app or 'return' to go back to the main menu."
+    puts "----------------------------------------------------------------------".colorize(:green)
+    puts "                       The Movie Database App                         ".colorize(:green)
+    puts "----------------------------------------------------------------------".colorize(:green)
+    puts "Type 'exit' to close this app or 'return' to go back to the main menu.".colorize(:yellow)
     spacer
     spacer
   end
@@ -284,7 +284,7 @@ class MovieDB::CLI
 
   def close
     clear
-    puts "Thanks for using The Movie Database App! Goodbye!"
+    puts "Thanks for using The Movie Database App! Goodbye!".colorize(:green)
     exit
   end
 
@@ -298,7 +298,7 @@ class MovieDB::CLI
 
   def invalid
     spacer
-    puts "Invalid Response. Please try again or type 'exit' to close the program."
+    puts "Invalid Response! Please try again or type 'exit' to close the program.".colorize(:light_red)
     spacer
   end
 end
