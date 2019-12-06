@@ -18,6 +18,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
     puts "4. Recommended Movies"
     puts "5. Now Playing"
     puts "6. Upcoming Movies"
+    spacer
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -59,7 +60,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
 
       clear
       header
-      MovieDB::APIService.pull_movies(search, input)
+      MovieDB::APIService.pull_movies('search', input)
 
       if MovieDB::Movies.all.count >= 1
         range = MovieDB::Movies.all.count.clamp(1, 7)
@@ -85,7 +86,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
     header
     puts "Here are the top 20 movies of all time:"
     spacer
-    MovieDB::APIService.pull_movies(top_rated)
+    MovieDB::APIService.pull_movies('top_rated')
     MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
@@ -102,7 +103,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
     header
     puts "Here are the top 20 popular movies today:"
     spacer
-    MovieDB::APIService.pull_movies(popular)
+    MovieDB::APIService.pull_movies('popular')
     range = MovieDB::Movies.all.count.clamp(1, 20)
     MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
@@ -128,10 +129,10 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
 
       clear
       header
-      MovieDB::APIService.search_movie(input)
+      MovieDB::APIService.pull_movies('search', input)
       movie = MovieDB::Movies.all[0]
       MovieDB::Movies.reset
-      MovieDB::APIService.pull_movies(recommendations, nil, movie.id)
+      MovieDB::APIService.pull_movies('recommendations', nil, movie.id)
       puts "Here are some recommended movies based on #{movie.title}:"
       spacer
       range = MovieDB::Movies.all.count.clamp(1, 5)
@@ -152,7 +153,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
     header
     puts "Here are a few movies playing today at your local theater:"
     spacer
-    MovieDB::APIService.pull_movies(now_playing)
+    MovieDB::APIService.pull_movies('now_playing')
     range = MovieDB::Movies.all.count.clamp(1, 10)
     MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
@@ -169,7 +170,7 @@ class MovieDB::CLI #Want to add Read Review + Top Actor list on movie page
     header
     puts "Here are a few upcoming movies:"
     spacer
-    MovieDB::APIService.pull_movies(upcoming)
+    MovieDB::APIService.pull_movies('upcoming')
     range = MovieDB::Movies.all.count.clamp(1, 10)
     MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
