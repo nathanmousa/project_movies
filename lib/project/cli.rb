@@ -56,15 +56,16 @@ class MovieDB::CLI
       MovieDB::APIService.search_movie(input)
 
       if MovieDB::Movies.all.count >= 1
+        range = MovieDB::Movies.all.count.clamp(1, 7)
         MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
           puts "#{index}. #{movie.title}"
         end
-        range = MovieDB::Movies.all.count.clamp(1, 7)
         spacer
         puts "What movie would you like to see more information on?"
         select_movie(range)
       else
         puts "Sorry, there were no movies by that name. Please try again."
+        spacer
         input = gets.strip.downcase
       end
     end
@@ -96,10 +97,10 @@ class MovieDB::CLI
     puts "Here are the top 20 popular movies today:"
     spacer
     MovieDB::APIService.popular_movies
+    range = MovieDB::Movies.all.count.clamp(1, 20)
     MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
-    range = MovieDB::Movies.all.count.clamp(1, 20)
     spacer
     puts "What movie would you like to see more information on?"
     select_movie(range)
@@ -127,10 +128,10 @@ class MovieDB::CLI
       MovieDB::APIService.recommended(movie.id)
       puts "Here are some recommended movies based on #{movie.title}:"
       spacer
+      range = MovieDB::Movies.all.count.clamp(1, 5)
       MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
-      range = MovieDB::Movies.all.count.clamp(1, 5)
       spacer
       puts "What movie would you like to see more information on?"
       select_movie(range)
@@ -138,7 +139,7 @@ class MovieDB::CLI
     close
   end
 
-  def select_movie(array_range) #STOP QUERY IF NO MOVIE IS AVAILABLE + IF ONLY ONE MOVIE, SKIP SELECTION AND GO STRAIGHT TO MOVIE
+  def select_movie(array_range)
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -152,7 +153,7 @@ class MovieDB::CLI
         MovieDB::APIService.search_single_movie(movie) #Update database with 2nd level data
         title = Artii::Base.new
 
-        if movie.title.length <= 10
+        if movie.title.length <= 13
           puts title.asciify("#{movie.title}") + "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}"
         else
           puts "#{movie.title}"
