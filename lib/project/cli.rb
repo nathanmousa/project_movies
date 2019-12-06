@@ -15,6 +15,7 @@ class MovieDB::CLI
     puts "1. Search Movie"
     puts "2. Top Movies"
     puts "3. Popular Movies"
+    puts "4. Recommended Movies"
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -24,6 +25,8 @@ class MovieDB::CLI
         top_movies
       elsif input.to_i == 3 || input == "popular movies"
         popular_movies
+      elsif input.to_i == 4 || input == "recommended movies"
+        recommended_movies
       elsif input == 'return'
         menu
       else
@@ -94,6 +97,53 @@ class MovieDB::CLI
     spacer
     puts "What movie would you like to see more information on?"
     select_movie
+  end
+
+  def recommended_movies
+    input = nil
+
+    clear
+    header
+    puts "What movie did you recently like?"
+    input = gets.strip.downcase
+
+    while input != 'exit'
+      if input == 'return'
+        clear
+        menu
+      end
+
+      clear
+      header
+      MovieDB::APIService.search_movie(input)
+      MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
+        puts "#{index}. #{movie.title}"
+      end
+
+      spacer
+      puts "Select which movie you want to base your recommendations on."
+      input = gets.strip.downcase
+
+      while input != 'exit'
+        if input == 'return'
+          clear
+          menu
+        elsif numeric(input)
+          clear
+          header
+          movie = MovieDB::Movies.all[input.to_i - 1]
+          MovieDB::APIService.recommended(movie)
+          MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
+            puts "#{index}. #{movie.title}"
+          end
+        else
+          invalid
+          input = gets.strip.downcase
+        end
+      end
+      close
+    end
+    close
   end
 
   def select_movie #NEED TO FIX USER FROM SELECTING OUTSIDE ARRAY RANGE + STOP QUERY IF NO MOVIE IS AVAILABLE + IF ONLY ONE MOVIE, SKIP SELECTION AND GO STRAIGHT TO MOVIE
