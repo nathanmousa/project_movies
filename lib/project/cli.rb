@@ -11,7 +11,6 @@ class MovieDB::CLI
     
     header
     puts "What would you like to do today?"
-    puts "Type 'exit' anytime to close the program."
     spacer
     puts "1. Search Movie"
     input = gets.strip.downcase
@@ -19,6 +18,8 @@ class MovieDB::CLI
     while input != 'exit'
       if input.to_i == 1 || input == "search movie"
         search_movie
+      elsif input == 'return'
+        menu
       else
       invalid
       input = gets.strip.downcase
@@ -33,7 +34,6 @@ class MovieDB::CLI
     clear
     header
     puts "What movie would you like to search?"
-    puts "Type 'exit' to close this app or 'return' to go back to the main menu."
     input = gets.strip.downcase
     
     while input != 'exit'
@@ -52,7 +52,6 @@ class MovieDB::CLI
       
       spacer
       puts "What movie would you like to see more information on?"
-      puts "Type 'exit' to close this app or 'return' to go back to the main menu."
       select_search
     end
     close
@@ -92,9 +91,8 @@ class MovieDB::CLI
         puts "Production Companies: #{movie.production_list}"
         spacer
         puts "Description: #{movie.overview}"
-        spacer
         puts "-----------------------------------------------------------------"
-        puts "Type 'exit' to close this app or 'return' to go back to the main menu."
+        spacer
         input = gets.strip.downcase
         
         while input != 'exit'
@@ -130,9 +128,11 @@ class MovieDB::CLI
   end
   
   def header
-    puts "---------------------------------------------------------------------------"
-    puts "                          The Movie Database App                           "
-    puts "---------------------------------------------------------------------------"
+    puts "----------------------------------------------------------------------"
+    puts "                       The Movie Database App                         "
+    puts "----------------------------------------------------------------------"
+    puts "Type 'exit' to close this app or 'return' to go back to the main menu."
+    spacer
     spacer
   end
   
