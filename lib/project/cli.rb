@@ -54,7 +54,7 @@ class MovieDB::CLI
       
       spacer
       puts "What movie would you like to see more information on?"
-      select_search
+      select_movie
     end
     close
   end
@@ -64,10 +64,10 @@ class MovieDB::CLI
     
     clear
     header
-    puts "Here are the top movies today!"
+    puts "Here are the top 20 movies today!"
     spacer
     MovieDB::APIService.top_movies
-    MovieDB::Movies.all.take(10).each.with_index(1) do |movie, index|
+    MovieDB::Movies.all.take(20).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
     
