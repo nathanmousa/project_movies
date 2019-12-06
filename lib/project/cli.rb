@@ -13,6 +13,7 @@ class MovieDB::CLI
     puts "What would you like to do today?"
     spacer
     puts "1. Search Movie"
+    puts "2. Top Movies"
     input = gets.strip.downcase
     
     while input != 'exit'
@@ -57,8 +58,25 @@ class MovieDB::CLI
     end
     close
   end
-      
-  def select_search
+  
+  def top_movies
+    input = nil
+    
+    clear
+    header
+    puts "Here are the top movies today!"
+    spacer
+    MovieDB::APIService.top_movies
+    MovieDB::Movies.all.take(10).each.with_index(1) do |movie, index|
+      puts "#{index}. #{movie.title}"
+    end
+    
+    spacer
+    puts "What movie would you like to see more information on?"
+    select_movie
+  end
+  
+  def select_movie
     input = gets.strip.downcase
     
     while input != 'exit'
@@ -117,33 +135,6 @@ class MovieDB::CLI
     close
   end
   
-  def top_movies
-    input = nil
-    
-    clear
-    header
-    puts "Here are the top movies today!"
-    input = gets.strip.downcase
-    
-    while input != 'exit'
-      if input == 'return'
-        clear
-        menu
-      end
-      
-      clear
-      header
-      MovieDB::APIService.top_movies
-      MovieDB::Movies.all.take(10).each.with_index(1) do |movie, index|
-        puts "#{index}. #{movie.title}"
-      end
-      
-      spacer
-      puts "What movie would you like to see more information on?"
-      #select_top
-    end
-    close
-  end
   
   
   
