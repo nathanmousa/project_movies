@@ -233,6 +233,7 @@ class MovieDB::CLI
         end
         spacer
         puts "-----------------------------------------------------------------"
+        puts "Type 'exit' to close this app or 'return' to go back to the main menu."
         spacer
         input = gets.strip.downcase
 
