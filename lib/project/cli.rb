@@ -18,6 +18,8 @@ class MovieDB::CLI
     while input != 'exit'
       if input.to_i == 1 || input == "search movie"
         search_movie
+      elsif input.to_i == 2 || input == "top movies"
+        top_movies
       elsif input == 'return'
         menu
       else
@@ -45,7 +47,6 @@ class MovieDB::CLI
       clear
       header
       MovieDB::APIService.search_movie(input)
-      
       MovieDB::Movies.all.take(8).each.with_index(1) do |movie, index|
         puts "#{index}. #{movie.title}"
       end
@@ -90,7 +91,10 @@ class MovieDB::CLI
         spacer
         puts "Production Companies: #{movie.production_list}"
         spacer
-        puts "Description: #{movie.overview}"
+        spacer
+        puts "Description:"
+        puts "#{movie.overview}"
+        spacer
         puts "-----------------------------------------------------------------"
         spacer
         input = gets.strip.downcase
@@ -113,6 +117,33 @@ class MovieDB::CLI
     close
   end
   
+  def top_movies
+    input = nil
+    
+    clear
+    header
+    puts "Here are the top movies today!"
+    input = gets.strip.downcase
+    
+    while input != 'exit'
+      if input == 'return'
+        clear
+        menu
+      end
+      
+      clear
+      header
+      MovieDB::APIService.top_movies
+      MovieDB::Movies.all.take(10).each.with_index(1) do |movie, index|
+        puts "#{index}. #{movie.title}"
+      end
+      
+      spacer
+      puts "What movie would you like to see more information on?"
+      #select_top
+    end
+    close
+  end
   
   
   

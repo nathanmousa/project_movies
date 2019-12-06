@@ -14,4 +14,13 @@ class MovieDB::APIService
     results = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{search.id}?api_key=#{API_KEY}"))
     search.update(results)
   end
+  
+  def self.top_movies
+    results = JSON.parse(RestClient.get("#{BASE_URL}/movie/top_rated?api_key=#{API_KEY}&page=1"))
+    
+    results["results"].each do |movie|
+      MovieDB::Movies.new(movie)
+    end
+  end
+  
 end
