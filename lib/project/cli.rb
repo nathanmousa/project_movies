@@ -196,6 +196,7 @@ class MovieDB::CLI
         header
         movie = MovieDB::Movies.all[input.to_i - 1]
         MovieDB::APIService.search_single_movie(movie) #Update database with 2nd level data
+        actor_hash = Hash[movie.return_actor_list('name').zip movie.return_actor_list('character')] 
         title = Artii::Base.new
 
         if movie.title.length <= 13
@@ -222,7 +223,10 @@ class MovieDB::CLI
         puts "#{movie.overview}"
         spacer
         spacer
-        movie.print_list('character')
+        puts "Starring:"
+        actor_hash.each do |name, character|
+          puts "#{name} as #{character}"
+        end
         spacer
         puts "-----------------------------------------------------------------"
         spacer
