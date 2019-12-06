@@ -4,31 +4,36 @@ class MovieDB::APIService
 
   def self.search_movie(search)
     results = JSON.parse(RestClient.get("#{BASE_URL}/search/movie?api_key=#{API_KEY}&query=#{search}"))
-
-    results["results"].each do |movie|
-      MovieDB::Movies.new(movie)
-    end
+    new_movies(results)
   end
 
-  def self.search_single_movie(search)
+  def self.search_single_movie(search) #Used to get 2nd level data not found in broad movie search such as genre, budget, runtime, etc.
     results = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{search.id}?api_key=#{API_KEY}"))
     search.update(results)
   end
 
   def self.top_movies
     results = JSON.parse(RestClient.get("#{BASE_URL}/movie/top_rated?api_key=#{API_KEY}&page=1"))
-
-    results["results"].each do |movie|
-      MovieDB::Movies.new(movie)
-    end
+    new_movies(results)
   end
 
   def self.popular_movies
     results = JSON.parse(RestClient.get("#{BASE_URL}/movie/popular?api_key=#{API_KEY}&page=1"))
+    new_movies(results)
+  end
 
+  def self.recommended(movie)
+    results = JSON.parse(RestClient.get("#{BASE_URL}/movie/#{movie.id}/recommendations?api_key=#{API_KEY}&page=1"))
+    new_movies(results)
+  end
+
+
+
+
+  private
+  def new_movies(results)
     results["results"].each do |movie|
       MovieDB::Movies.new(movie)
     end
   end
-
 end
