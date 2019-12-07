@@ -4,7 +4,7 @@ class MovieDB::CLI
     menu
   end
 
-  def menu
+  def menu #Main Menu
     clear
     input = nil
     resetdb
@@ -43,7 +43,7 @@ class MovieDB::CLI
     close
   end
 
-  def search_movie
+  def search_movie #Take's user input and searches for movies
     input = nil
 
     clear
@@ -78,7 +78,7 @@ class MovieDB::CLI
     close
   end
 
-  def recommended_movies
+  def recommended_movies #Take's user input and returns movies recommended 
     input = nil
 
     clear
@@ -127,7 +127,7 @@ class MovieDB::CLI
     fetch_data("Here are the top 20 popular movies today:", "popular", 20)
   end
 
-  def select_movie(array_range) #Search down Hippo for no data movies
+  def select_movie(array_range) #Will select a specific movie and recieve level 2 data + display to user
     spacer
     input = gets.strip.downcase
 

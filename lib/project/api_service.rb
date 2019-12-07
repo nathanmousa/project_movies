@@ -9,7 +9,7 @@ class MovieDB::APIService
     search.update(actors)
   end
 
-  def self.pull_movies(method, search=nil, movie_id=nil)
+  def self.pull_movies(method, search=nil, movie_id=nil) #Used to return list of 1st level data of movies based on search.
     if search != nil
       results = JSON.parse(RestClient.get("#{BASE_URL}/#{method}/movie?api_key=#{API_KEY}&query=#{search}"))
     elsif movie_id != nil

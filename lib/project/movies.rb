@@ -1,19 +1,19 @@
 class MovieDB::Movies
-  attr_accessor :title, :id, :poster_path, :genres, :vote_average, :overview, :release_date, :budget, :revenue, :status, :runtime, :production_companies, :cast, :character
+  attr_accessor :title, :id, :genres, :vote_average, :overview, :release_date, :budget, :revenue, :status, :runtime, :production_companies, :cast, :character
   @@all = []
   
-  def initialize(args)
-    update(args)
+  def initialize(data)
+    update(data)
     save
   end
   
-  def update(args)
-    args.each do |key, value|
+  def update(data) #Searches through hash recieved and saving key + value to attr that matches name. Ignores any additional data not needed for this class.
+    data.each do |key, value|
       self.send("#{key}=", value) if self.respond_to?(key)
     end
   end
   
-  def joined_list(var)
+  def joined_list(var) #Takes 3rd level data and binds them together in on line for user readability.
     array = []
     instance_variable = instance_variable_get("@#{var}")
     
@@ -27,7 +27,7 @@ class MovieDB::Movies
     array.join(', ')
   end
   
-  def return_actor_list(value)
+  def return_actor_list(value) #Takes 3rd level data and saves it into it's own array to be listed later.
     array = []
     
     @cast.each do |hash|
@@ -50,9 +50,11 @@ class MovieDB::Movies
   
   
   
+  
+  
+  
   private
   def save
     @@all << self
   end
-    
 end
