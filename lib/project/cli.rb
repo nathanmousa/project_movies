@@ -7,7 +7,7 @@ class MovieDB::CLI
   def menu
     clear
     input = nil
-    MovieDB::Movies.reset
+    resetdb
 
     header
     puts "What would you like to do today?".colorize(:yellow)
@@ -96,7 +96,7 @@ class MovieDB::CLI
       header
       MovieDB::APIService.pull_movies('search', input)
       movie = MovieDB::Movies.all[0]
-      MovieDB::Movies.reset
+      resetdb
       MovieDB::APIService.pull_movies('similar', nil, movie.id)
       puts "Here are some recommended movies based on #{movie.title}:".colorize(:yellow)
       spacer
@@ -134,7 +134,7 @@ class MovieDB::CLI
     while input != 'exit'
       if input == 'return'
         menu
-      elsif numeric(input) && input.to_i.between?(1, array_range)
+      elsif numeric?(input) && input.to_i.between?(1, array_range)
         clear
         header
         movie = MovieDB::Movies.all[input.to_i - 1]
@@ -242,7 +242,7 @@ class MovieDB::CLI
 
 
   private
-  def clear
+  def clear #Clears Terminal
     if Gem.win_platform?
       system 'cls'
     else
@@ -250,7 +250,7 @@ class MovieDB::CLI
     end
   end
 
-  def header
+  def header #Persistent Header
     divider
     puts "                       The Movie Database App                         ".colorize(:green)
     divider
@@ -259,35 +259,39 @@ class MovieDB::CLI
     spacer
   end
 
-  def spacer
+  def spacer #Breakline
     puts ""
   end
 
-  def close
+  def close #Prints Goodbye Message
     clear
     puts "Thanks for using The Movie Database App! Goodbye!".colorize(:green)
     exit
   end
 
-  def currency(num)
+  def currency(num) #Converts Digits to Currency Format
   "$#{num.to_s.gsub(/\d(?=(...)+$)/, '\0,')}"
   end
 
-  def numeric(string)
+  def numeric?(string) #Checks if String is Numerical
     string.scan(/\D/).empty?
   end
 
-  def invalid
+  def invalid #Prints Invalid Response
     spacer
     puts "Invalid Response! Please try again or type 'exit' to close the program.".colorize(:light_red)
     spacer
   end
   
-  def divider
+  def resetdb #Resets Program's Movie Database
+    MovieDB::Movies.reset
+  end
+  
+  def divider #Line Divider
     puts "----------------------------------------------------------------------".colorize(:green)
   end
   
-  def fetch_data(script, method, range)
+  def fetch_data(script, method, range) #Grabs New Data w/ Given Script, Method, and Range
     input = nil
 
     clear
