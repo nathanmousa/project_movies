@@ -19,6 +19,8 @@ class MovieDB::CLI
     puts "5. Now Playing"
     puts "6. Upcoming Movies"
     spacer
+    divider
+    spacer
     input = gets.strip.downcase
 
     while input != 'exit'
@@ -35,6 +37,7 @@ class MovieDB::CLI
       elsif input.to_i == 6 || input == "upcoming movies"
         upcoming_movies
       elsif input == 'return'
+      menu
       else
       invalid
       input = gets.strip.downcase
@@ -49,6 +52,8 @@ class MovieDB::CLI
     clear
     header
     puts "What movie would you like to search?".colorize(:yellow)
+    spacer
+    divider
     spacer
     input = gets.strip.downcase
 
@@ -67,10 +72,13 @@ class MovieDB::CLI
           puts "#{index}. #{movie.title}"
         end
         spacer
-        puts "What movie would you like to see more information on? Type the number referencing the movie.".colorize(:yellow)
+        puts "What movie would you like to see more information on?".colorize(:yellow)
+        puts "Type the number referencing the movie.".colorize(:yellow)
         select_movie(range)
       else
         puts "Sorry, there were no movies by that name. Please try again.".colorize(:yellow)
+        spacer
+        divider
         spacer
         input = gets.strip.downcase
       end
@@ -84,6 +92,8 @@ class MovieDB::CLI
     clear
     header
     puts "What movie did you recently like?".colorize(:yellow)
+    spacer
+    divider
     spacer
     input = gets.strip.downcase
 
@@ -105,7 +115,8 @@ class MovieDB::CLI
         puts "#{index}. #{movie.title}"
       end
       spacer
-      puts "What movie would you like to see more information on? Type the number referencing the movie.".colorize(:yellow)
+      puts "What movie would you like to see more information on?".colorize(:yellow)
+      puts "Type the number referencing the movie.".colorize(:yellow)
       select_movie(range)
     end
     close
@@ -128,6 +139,8 @@ class MovieDB::CLI
   end
 
   def select_movie(array_range) #Will select a specific movie and recieve level 2 data + display to user
+    spacer
+    divider
     spacer
     input = gets.strip.downcase
 
@@ -212,10 +225,11 @@ class MovieDB::CLI
             puts "#{name} as #{character}"
           end
           spacer
-          divider
         end
         
         puts "Type 'exit' to close this app or 'return' to go back to the main menu.".colorize(:yellow)
+        spacer
+        divider
         spacer
         input = gets.strip.downcase
 
@@ -306,7 +320,8 @@ class MovieDB::CLI
     end
     
     spacer
-    puts "What movie would you like to see more information on? Type the number referencing the movie.".colorize(:yellow)
+    puts "What movie would you like to see more information on?".colorize(:yellow)
+    puts "Type the number referencing the movie.".colorize(:yellow)
     select_movie(array_range)
   end
 end
