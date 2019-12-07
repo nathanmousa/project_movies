@@ -1,11 +1,11 @@
 class MovieDB::CLI
 
   def start
-    clear
     menu
   end
 
   def menu
+    clear
     input = nil
     MovieDB::Movies.reset
 
@@ -35,7 +35,6 @@ class MovieDB::CLI
       elsif input.to_i == 6 || input == "upcoming movies"
         upcoming_movies
       elsif input == 'return'
-        menu
       else
       invalid
       input = gets.strip.downcase
@@ -55,7 +54,6 @@ class MovieDB::CLI
 
     while input != 'exit'
       if input == 'return'
-        clear
         menu
       end
 
@@ -64,7 +62,7 @@ class MovieDB::CLI
       MovieDB::APIService.pull_movies('search', input)
 
       if MovieDB::Movies.all.count >= 1
-        range = MovieDB::Movies.all.count.clamp(1, 7)
+        range = MovieDB::Movies.all.count.clamp(1, 10)
         MovieDB::Movies.all.take(range).each.with_index(1) do |movie, index|
           puts "#{index}. #{movie.title}"
         end
@@ -86,11 +84,11 @@ class MovieDB::CLI
     clear
     header
     puts "What movie did you recently like?".colorize(:yellow)
+    spacer
     input = gets.strip.downcase
 
     while input != 'exit'
       if input == 'return'
-        clear
         menu
       end
 
@@ -135,7 +133,6 @@ class MovieDB::CLI
 
     while input != 'exit'
       if input == 'return'
-        clear
         menu
       elsif numeric(input) && input.to_i.between?(1, array_range)
         clear
@@ -156,13 +153,13 @@ class MovieDB::CLI
         if movie.vote_average.to_s.delete('.') != "00"
           puts "Rating: ".colorize(:yellow) + "%#{movie.vote_average.to_s.delete('.')}"
         else
-          puts "Rating: ".colorize(:yellow) + "Not enough votes to provide a fair rating"
+          puts "Rating: ".colorize(:yellow) + "N/A"
         end
         
         if !movie.joined_list('genres').empty?
           puts "Genre: ".colorize(:yellow) + "#{movie.joined_list('genres')}"
         else
-          puts "Genre: ".colorize(:yellow) + "No Data"
+          puts "Genre: ".colorize(:yellow) + "N/A"
         end
         
         puts "Status: ".colorize(:yellow) + "#{movie.status}"
@@ -171,25 +168,25 @@ class MovieDB::CLI
         if movie.runtime.to_i != 0
           puts "Runtime: ".colorize(:yellow) + "#{movie.runtime} Minutes"
         else
-          puts "Runtime: ".colorize(:yellow) + "No Data"
+          puts "Runtime: ".colorize(:yellow) + "N/A"
         end
         
         if movie.revenue.to_i != 0
           puts "Revenue: ".colorize(:yellow) + "#{currency(movie.revenue)}"
         else
-          puts "Revenue: ".colorize(:yellow) + "No Data"
+          puts "Revenue: ".colorize(:yellow) + "N/A"
         end
         
         if movie.budget.to_i != 0
           puts "Budget: ".colorize(:yellow) + "#{currency(movie.budget)}"
         else
-          puts "Budget: ".colorize(:yellow) + "No Data"
+          puts "Budget: ".colorize(:yellow) + "N/A"
         end
         
         if movie.revenue.to_i - movie.budget.to_i != 0
           puts "Profit: ".colorize(:yellow) + "#{currency(movie.revenue - movie.budget)}"
         else
-          puts "Profit: ".colorize(:yellow) + "No Data"
+          puts "Profit: ".colorize(:yellow) + "N/A"
         end
         spacer
         
@@ -198,14 +195,14 @@ class MovieDB::CLI
           spacer
         end
         
-        puts "-----------------------------------------------------------------".colorize(:green)
+        divider
         
         if !movie.overview.empty?
           spacer
           puts "Description:".colorize(:yellow)
           puts "#{movie.overview}"
           spacer
-          puts "-----------------------------------------------------------------".colorize(:green)
+          divider
         end
         
         if !actor_hash.empty?
@@ -215,15 +212,15 @@ class MovieDB::CLI
             puts "#{name} as #{character}"
           end
           spacer
-          puts "-----------------------------------------------------------------".colorize(:green)
+          divider
         end
+        
         puts "Type 'exit' to close this app or 'return' to go back to the main menu.".colorize(:yellow)
         spacer
         input = gets.strip.downcase
 
         while input != 'exit'
           if input == 'return'
-            clear
             menu
           else
             invalid
@@ -254,9 +251,9 @@ class MovieDB::CLI
   end
 
   def header
-    puts "----------------------------------------------------------------------".colorize(:green)
+    divider
     puts "                       The Movie Database App                         ".colorize(:green)
-    puts "----------------------------------------------------------------------".colorize(:green)
+    divider
     puts "Type 'exit' to close this app or 'return' to go back to the main menu.".colorize(:yellow)
     spacer
     spacer
@@ -284,6 +281,10 @@ class MovieDB::CLI
     spacer
     puts "Invalid Response! Please try again or type 'exit' to close the program.".colorize(:light_red)
     spacer
+  end
+  
+  def divider
+    puts "----------------------------------------------------------------------".colorize(:green)
   end
   
   def fetch_data(script, method, range)
