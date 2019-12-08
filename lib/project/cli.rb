@@ -46,6 +46,12 @@ class MovieDB::CLI
     close
   end
 
+  def find_movie
+    input = nil
+
+    MovieDB::Movies.find(input)
+  end
+
   def search_movie #Take's user input and searches for movies
     input = nil
 
@@ -86,7 +92,7 @@ class MovieDB::CLI
     close
   end
 
-  def recommended_movies #Take's user input and returns movies recommended 
+  def recommended_movies #Take's user input and returns movies recommended
     input = nil
 
     clear
@@ -129,7 +135,7 @@ class MovieDB::CLI
   def upcoming_movies
     fetch_data("Here are a few upcoming movies:", "upcoming", 10)
   end
-  
+
   def top_movies
     fetch_data("Here are the top 20 movies of all time:", "top_rated", 20)
   end
@@ -162,54 +168,54 @@ class MovieDB::CLI
           puts "#{movie.release_date[5..6]}/#{movie.release_date[8..9]}/#{movie.release_date[0..3]}".colorize(:yellow)
         end
         spacer
-        
+
         if movie.vote_average.to_s.delete('.') != "00"
           puts "Rating: ".colorize(:yellow) + "%#{movie.vote_average.to_s.delete('.')}"
         else
           puts "Rating: ".colorize(:yellow) + "N/A"
         end
-        
+
         if !movie.joined_list('genres').empty?
           puts "Genre: ".colorize(:yellow) + "#{movie.joined_list('genres')}"
         else
           puts "Genre: ".colorize(:yellow) + "N/A"
         end
-        
+
         puts "Status: ".colorize(:yellow) + "#{movie.status}"
         spacer
-        
+
         if movie.runtime.to_i != 0
           puts "Runtime: ".colorize(:yellow) + "#{movie.runtime} Minutes"
         else
           puts "Runtime: ".colorize(:yellow) + "N/A"
         end
-        
+
         if movie.revenue.to_i != 0
           puts "Revenue: ".colorize(:yellow) + "#{currency(movie.revenue)}"
         else
           puts "Revenue: ".colorize(:yellow) + "N/A"
         end
-        
+
         if movie.budget.to_i != 0
           puts "Budget: ".colorize(:yellow) + "#{currency(movie.budget)}"
         else
           puts "Budget: ".colorize(:yellow) + "N/A"
         end
-        
+
         if movie.revenue.to_i - movie.budget.to_i != 0
           puts "Profit: ".colorize(:yellow) + "#{currency(movie.revenue - movie.budget)}"
         else
           puts "Profit: ".colorize(:yellow) + "N/A"
         end
         spacer
-        
+
         if !movie.joined_list('production_companies').empty?
           puts "Production Companies: ".colorize(:yellow) + "#{movie.joined_list('production_companies')}"
           spacer
         end
-        
+
         divider
-        
+
         if !movie.overview.empty?
           spacer
           puts "Description:".colorize(:yellow)
@@ -217,7 +223,7 @@ class MovieDB::CLI
           spacer
           divider
         end
-        
+
         if !actor_hash.empty?
           spacer
           puts "Starring:".colorize(:yellow)
@@ -226,7 +232,7 @@ class MovieDB::CLI
           end
           spacer
         end
-        
+
         puts "Type 'exit' to close this app or 'return' to go back to the main menu.".colorize(:yellow)
         spacer
         divider
@@ -296,15 +302,15 @@ class MovieDB::CLI
     puts "Invalid Response! Please try again or type 'exit' to close the program.".colorize(:light_red)
     spacer
   end
-  
+
   def resetdb #Resets Program's Movie Database
     MovieDB::Movies.reset
   end
-  
+
   def divider #Line Divider
     puts "----------------------------------------------------------------------".colorize(:green)
   end
-  
+
   def fetch_data(script, method, range) #Grabs New Data w/ Given Script, Method, and Range
     input = nil
 
@@ -314,11 +320,11 @@ class MovieDB::CLI
     spacer
     MovieDB::APIService.pull_movies("#{method}")
     array_range = MovieDB::Movies.all.count.clamp(1, range)
-    
+
     MovieDB::Movies.all.take(array_range).each.with_index(1) do |movie, index|
       puts "#{index}. #{movie.title}"
     end
-    
+
     spacer
     puts "What movie would you like to see more information on?".colorize(:yellow)
     puts "Type the number referencing the movie.".colorize(:yellow)
