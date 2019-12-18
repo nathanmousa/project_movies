@@ -46,10 +46,11 @@ class MovieDB::CLI
     close
   end
 
-  def find_movie
+  def find_movie #Test
     input = nil
+    input = gets.strip.downcase
 
-    MovieDB::Movies.find(input)
+    MovieDB::Movies.find_or_create_by_name(input)
   end
 
   def search_movie #Take's user input and searches for movies

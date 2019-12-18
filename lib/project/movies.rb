@@ -17,12 +17,12 @@ class MovieDB::Movies
     @@all.find { |movie| movie.title == input}
   end
 
-  def self.create
-
+  def self.create(input)
+    MovieDB::APIService.pull_movies('search', input)
   end
 
-  def self.find_or_create
-    find || create
+  def self.find_or_create_by_name(input)
+    find(input) || create(input)
   end
 
   def joined_list(var) #Takes 3rd level data and binds them together in on line for user readability.
