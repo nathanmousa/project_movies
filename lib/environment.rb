@@ -1,5 +1,5 @@
 require 'json'
-require 'rst-client'
+require 'rest-client'
 require 'artii'
 require 'colorize'
 
